@@ -1,0 +1,36 @@
+{
+  "name": "steam-hour-idler",
+  "version": "0.1.0",
+  "description": "A clean and simple terminal-based Steam hour idler (QR or password login, check games, idle them)",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "steam-hour-idler": "src/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "smoke": "node scripts/qr-smoke.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "steam",
+    "idler",
+    "playtime",
+    "tui",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "htm": "^3.1.1",
+    "ink": "^8.0.0",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.0",
+    "steam-session": "^1.9.4",
+    "steam-user": "^5.3.0"
+  }
+}
