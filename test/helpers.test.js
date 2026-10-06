@@ -35,11 +35,21 @@ test('filterGames matches name or appid, case-insensitive', () => {
 
 test('gameTypeAllowed filters tools unless enabled', () => {
   assert.equal(gameTypeAllowed('game', false), true);
+  assert.equal(gameTypeAllowed('Game', false), true, 'Steam casing varies');
   assert.equal(gameTypeAllowed(null, false), true);
   assert.equal(gameTypeAllowed(undefined, false), true);
+  assert.equal(gameTypeAllowed('', false), true);
+  assert.equal(gameTypeAllowed('GameDemo', false), true);
+  assert.equal(gameTypeAllowed('application', false), true);
+  assert.equal(gameTypeAllowed('Application', false), true);
   assert.equal(gameTypeAllowed('tool', false), false);
+  assert.equal(gameTypeAllowed('Tool', false), false);
   assert.equal(gameTypeAllowed('music', false), false);
+  assert.equal(gameTypeAllowed('DLC', false), false);
+  assert.equal(gameTypeAllowed('Config', false), false);
+  assert.equal(gameTypeAllowed('Demo', false), false);
   assert.equal(gameTypeAllowed('tool', true), true);
+  assert.equal(gameTypeAllowed('DLC', true), true);
   assert.equal(gameTypeAllowed('game', true), true);
 });
 

@@ -64,7 +64,7 @@ export default function GamesView({ service, snap }) {
       else if (input === 't') service.toggleTools();
       else if (input === 'f') service.toggleShared();
       else if (input === 's') service.togglePaused();
-      else if (input === 'r') service.reloadLibrary();
+      else if (input === 'r') service.reloadLibrary({ nudge: true });
       else if (input === 'l') service.logout();
       else if (input === '/') setSearching(true);
       else if (input === 'q') exit();

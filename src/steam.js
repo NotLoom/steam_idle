@@ -451,16 +451,19 @@ export class SteamService extends EventEmitter {
   }
 
   /** Manual retry (bound to `r` in the library view). */
-  reloadLibrary() {
+  reloadLibrary({ nudge = false } = {}) {
     this._clearLibraryTimers();
     this._loadAttempts = 0;
     this._libraryRetryStarted = null;
-    this._patch({ gamesLoaded: false });
-    this.notice('Reloading your game list…');
-    // Setting an option forces steam-user to re-request license product info.
-    try {
-      this._client?.setOption('enablePicsCache', true);
-    } catch {}
+    this._patch({ gamesLoaded: this._library.length > 0 });
+    // Only re-request license info when the cache is already populated —
+    // calling setOption earlier makes steam-user crash on a null license list.
+    if (nudge && this._picsReady()) {
+      this.notice('Reloading your game list…');
+      try {
+        this._client?.setOption('enablePicsCache', true);
+      } catch {}
+    }
     this._loadLibrary({ retry: false });
     if (this._library.length === 0) this._scheduleLibraryRetry();
   }
@@ -501,7 +504,7 @@ export class SteamService extends EventEmitter {
     if (this._library.length > 0) {
       this._emitGames();
     } else {
-      // Don't wait for `ownershipCached` alone — steam-user only emits it when
+      // Don't wait for `ownershipCached` alone — steam-user only emits it once
       // its license request succeeds, so poll until the cache is ready.
       this.reloadLibrary();
     }

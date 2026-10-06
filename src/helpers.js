@@ -60,13 +60,20 @@ export function sortGames(games) {
 
 /**
  * Whether an app of the given Steam store type should be shown.
- * With showTools=false only real games (and apps with an unknown type) are shown.
+ * With showTools=false, real games (and apps with an unknown type) are shown;
+ * DLC, soundtracks, tools and other non-playable extras are hidden.
+ * Steam reports types inconsistently ("game", "Game", "GameDemo", …), so the
+ * comparison is case-insensitive.
  * @param {string|null|undefined} type
  * @param {boolean} showTools
  */
 export function gameTypeAllowed(type, showTools) {
   if (showTools) return true;
-  return type == null || type === 'game';
+  const t = (type ?? '').toLowerCase();
+  if (!t) return true; // unknown type — most likely a normal game
+  if (t.includes('game')) return true; // game, GameDemo, game (any casing)
+  if (t.includes('application')) return true; // some games are StoreType "application"
+  return false;
 }
 
 /**
